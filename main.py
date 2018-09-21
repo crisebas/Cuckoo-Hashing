@@ -1,2 +1,0 @@
-print(':v')
-print('asd')
