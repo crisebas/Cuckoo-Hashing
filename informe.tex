@@ -6,11 +6,13 @@
 \usepackage{amsmath}
 \usepackage[cmintegrals]{newtxmath}
 \usepackage{bm}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 \usepackage{graphicx}%[demo]
-\usepackage{algorithm2e} %for psuedo code
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\usepackage{algorithmic}
 
-\title{Implementación del hash del cuco en firmas digitales}
+
+\title{Implementación del Hash del cuco en la encriptación de contraseñas para una base de datos }
 \author{Anthony Bautista$^{1}$, Cristopher García$^{2}$, Rosa Limachi$^{3}$ y Julio Rosales$^{4}$\\
 \small{$^{1}$ $^{2}$ $^{3}$ Ciencias de la Computación $^{4}$ Matemática\\}
 \small{Universidad Nacional de Ingeniería, Lima, Perú.\\}
@@ -21,37 +23,34 @@
 \maketitle
 
 \begin{abstract}
-Para almacenar contraseñas de forma segura este proyecto propone crear una base de datos cifrando las contraseñas mediante el algoritmo de hash del cuco implementando el lenguaje python, usando la librería pandas para el almacenamiento.
+ 
 
-
-
-
-
+En este informe se propone una solución particular al problema de la seguridad de las contraseñas en una base de datos, empleando el lenguaje python para la implementación y el algoritmo de hash del cuco para la encriptación. 
 
 
 \end{abstract}
 
 \section{Introducción}
 
-Como administrador  de una institución siempre surge el problema de identificar quién y cómo se usa los recursos del sistema. Una solución de este problema se puede crear un sistema de autenticación de usuarios donde se genera y almacena un nombre de usuario y su respectiva contraseña. Como el nombre se puede ser conocido por diferentes personas se entiende que el problema de la seguridad radica en el cifrado de las contraseñas. Además, cuando se verifique la contraseña este deber ser de manera rápida. Con el fin de lograr todo lo mencionado anteriormente se tendrá como objetivo la creación de una base de datos cifrando las contraseñas mediante el algoritmo de hash del cuco.
-
-
-
-\section{Preliminares}
-\subsection{Función Hash}
-Función que a partir de una entrada que suele ser una cadena, genera una salida (cadena) de longitud fija, esta tiene información.\\
+Como administrador  de una institución siempre surge el problema de identificar quién y cómo se usa los recursos del sistema. Una solución de este problema sería la creación de un sistema de autenticación de usuarios donde se genera y almacena un nombre de usuario y su respectiva contraseña. Aunque esta solución es válida sigue habiendo el problema de la suplantación de usuarios por el acceso no autorizado de las contraseñas en la base de datos donde se almacenaba. Por ello se tendría que encriptar las contraseñas de una forma que no se pueda obtener la real a partir de la encriptada.
+%
+\subsection{OBJETIVO}
+\begin{itemize}
+    \item Encriptación de contraseñas de una base de datos a partir del algoritmo de hash del cuco.
+\end{itemize}
+%
+\subsection{DEFINICIONES}
+\begin{itemize}
+    \item Función Hash: Función que a partir de una entrada que suele ser una cadena, genera una salida (cadena) de longitud fija, esta tiene información.\\
 La colisión hash se produce cuando entradas distintas generan el mismo valor en una función hash.
+    \item Tabla Hash: Estructura de datos que relaciona claves y valores para cada elemento que guarda. Utilizaremos una función hash para transformar la clave de un dato e identificar el lugar que ocupará en la tabla.
+    \item Colisiones Hash: Situación donde al aplicar una función hash a dos entradas distintas generan igual valor.
+    \item Hash del Cuco: Algoritmo que permite resolver las colisiones hash usando dos funciones hash en vez de una.
+\end{itemize}
 
-\subsection{Tabla hash}
-Estructura de datos que relaciona claves y valores para cada elemento que guarda. Utilizaremos una función hash para transformar la clave de un dato e identificar el lugar que ocupará en la tabla.
+\section{ESTADO DEL ARTE}
 
-\subsection{Hash del Cuco}
-Algoritmo que permite resolver las colisiones hash usando dos funciones hash en vez de una.
-
-
-\section{Estado del Arte}
-
-\begin{enumerate}
+\begin{itemize}
 
 \item
 Hashing: Técnicas y Hash para la Protección de Datos \\
@@ -60,23 +59,22 @@ Se compara las diversas técnicas de hashing, donde cada una de estas puede pres
 \item
 Algoritmo hash y vulnerabilidad a ataques\\
 Explica el problemas del ciframiento de los datos al aplicar encriptación por hash, donde se propone como solución emplear dos algoritmos como el SHA-1 y RIPEND-160.$[2]$
-\end{enumerate}
+\end{itemize}
 
 
-\section{Diseño del experimento}
+\section{DISEÑO DEL EXPERIMENTO}
 %metodo
 El experimento se realizara con el lenguaje python creando 4 módulos:
 \begin{enumerate}
     \item Main: Viene a ser el módulo principal donde se muestra las opciones de registro, validación de usuario y salir. Basta con ejecutar esta función para que el programa funcione.
     \item Datos: Almacena las funciones que permiten saber si el usuario que se registra existe, así como validar su contraseña.
     \item Cuckoo: Convierte la contraseña ingresada en una sucesión de caracteres, donde al aplicar el algoritmo hash del cuckoo, como en el Algoritmo 2 , permite desordenarla impidiendo su reconocimiento aun obteniendo la fuente donde se almacena las contraseñas.\\
-     \item Recepcion\_datos: Permite el almacenamiento de usuario y contraseñas en archivos cvs, encriptando la contraseña mediante el módulo Cuckoo. Además, de verificar si el usuario con su respectiva contraseña existen.\\
-
+     \item Recepcion\_datos: Permite el almacenamiento de usuario y contraseñas en archivos cvs, encriptando la contraseña mediante el módulo Cuckoo. Además, de verificar si el usuario con su respectiva contraseña existen.
+\end{enumerate}
     %usando algoritmos
-    
-    \begin{algorithm}[H]
+
+\begin{algorithm}
 \caption{ funcion{\textunderscore}hash(funcion,clave) \label{ALG1_1}}
-        
 	    \If{$ cont == n$}{
 	         $aux.append(clave)$\\
 	    }
@@ -91,12 +89,10 @@ El experimento se realizara con el lenguaje python creando 4 módulos:
 	            $return n-(suma\%n)-1$
 	        }
 	   }
- 	
-    	}	
 \end{algorithm}
-    
-\begin{algorithm}[H]
-	\caption{ Colocar( clave, tabla, cont, n)\label{ALG1_1}}
+    %ALGORITMO PRINCIPAL
+\begin{algorithm}
+	\caption{ Colocar( clave, tabla, cont, n) \label{ALG1_2}}
 	    \If{$ cont == n$}{
 	         $aux.append(clave)$\\
 	    }
@@ -106,17 +102,22 @@ El experimento se realizara con el lenguaje python creando 4 módulos:
 	         $ save = hashTable[tabla][pos[tabla]]$\\
 	          $hashTable[tabla][pos[tabla]] = clave$\\
 	           $ colocar(save, (tabla+1)\%ver, cont+1, n)$ 
-	           \\
-	        }
-	        {
+	           \\}
+	        
 	        $hashTable[tabla][pos[tabla]] = clave$\\
-	        }
- 	
-    	}	
+	   }
 \end{algorithm}
 
-\end{enumerate}
+%%
+\section{PRUEBA}
+Ver en el cuaderno de jupyter en el siguiente enlace:  \url{https://github.com/crisebas/Cuckoo-Hashing/blob/master/experimentacion.ipynb}
+
+%%BIBLIOGRAFIA
+\begin{thebibliography}{}
+\bibitem{}\url{ http://www.laccei.org/LACCEI2018-Lima/student_Papers/SP96.pdf}
+\bibitem{}\url{http://www.revistasbolivianas.org.bo/scielo.php?pid=s1997-40442009000200026&script=sci_arttext
+}
 
 
-
+\end{thebibliography}
 \end{document}
