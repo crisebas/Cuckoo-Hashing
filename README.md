@@ -1,7 +1,7 @@
-# Implementación del Hash del cuco en la encriptación de contraseñas para una base de datos
+# Implementación del Hash del cuco para búsqueda y encriptación en una base de datos
 Proyecto del curso Introducción a la estadística y probabilidades - CM274 
 
-## Uso
+## Prueba
 * Clonar el repositorio:
 ```bash
 git clone https://github.com/crisebas/Cuckoo-Hashing.git
